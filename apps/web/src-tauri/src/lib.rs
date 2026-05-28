@@ -27,6 +27,8 @@ fn default_relay_url() -> String {
 struct AppState {
     config: Mutex<Config>,
     config_path: PathBuf,
+    relay_url: String,
+    ws_handle: Mutex<Option<tauri::async_runtime::JoinHandle<()>>>,
 }
 
 #[tauri::command]
@@ -41,7 +43,31 @@ fn save_config(
     config: Config,
 ) -> Result<(), String> {
     config::save(&state.config_path, &config).map_err(|e| e.to_string())?;
+
+    // Only the relay identity/key matter for the connection — restarting the
+    // WebSocket on every volume/position tweak would needlessly drop it.
+    let creds_changed = {
+        let current = state.config.lock().unwrap();
+        current.client_id != config.client_id
+            || current.shared_key != config.shared_key
+    };
+
     *state.config.lock().unwrap() = config.clone();
+
+    if creds_changed {
+        // Reconnect with the new credentials immediately, no app restart needed.
+        let mut handle = state.ws_handle.lock().unwrap();
+        if let Some(old) = handle.take() {
+            old.abort();
+        }
+        *handle = Some(ws_client::spawn(
+            app.clone(),
+            state.relay_url.clone(),
+            config.client_id.clone(),
+            config.shared_key.clone(),
+        ));
+    }
+
     let _ = app.emit("popshot://config-updated", &config);
     Ok(())
 }
@@ -272,9 +298,9 @@ pub fn run() {
                 relay_url
             );
 
-            ws_client::spawn(
+            let ws_handle = ws_client::spawn(
                 app.handle().clone(),
-                relay_url,
+                relay_url.clone(),
                 cfg.client_id.clone(),
                 cfg.shared_key.clone(),
             );
@@ -282,6 +308,8 @@ pub fn run() {
             app.manage(AppState {
                 config: Mutex::new(cfg),
                 config_path,
+                relay_url,
+                ws_handle: Mutex::new(Some(ws_handle)),
             });
 
             build_tray(app.handle())?;

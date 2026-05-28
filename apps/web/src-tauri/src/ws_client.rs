@@ -51,7 +51,14 @@ enum ServerMessage {
     Display(DisplayPayload),
 }
 
-pub fn spawn(app: AppHandle, url: String, client_id: String, shared_key: String) {
+/// Spawns the relay connection loop and returns its task handle so the caller
+/// can `.abort()` it to force a reconnect with new credentials.
+pub fn spawn(
+    app: AppHandle,
+    url: String,
+    client_id: String,
+    shared_key: String,
+) -> tauri::async_runtime::JoinHandle<()> {
     tauri::async_runtime::spawn(async move {
         loop {
             if let Err(e) = run_once(&app, &url, &client_id, &shared_key).await {
@@ -60,7 +67,7 @@ pub fn spawn(app: AppHandle, url: String, client_id: String, shared_key: String)
             log::info!("[ws] reconnecting in 5s...");
             tokio::time::sleep(Duration::from_secs(5)).await;
         }
-    });
+    })
 }
 
 async fn run_once(
