@@ -1,0 +1,3 @@
+{
+  "extends": "@popshot/config/tsconfig.base.json"
+}

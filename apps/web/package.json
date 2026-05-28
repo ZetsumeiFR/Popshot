@@ -1,0 +1,44 @@
+{
+  "name": "web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "serve": "vite preview",
+    "start": "vite",
+    "check-types": "vite build && tsc --noEmit",
+    "tauri": "tauri",
+    "desktop:dev": "tauri dev",
+    "desktop:build": "tauri build"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@popshot/env": "workspace:*",
+    "@popshot/ui": "workspace:*",
+    "@tailwindcss/vite": "^4.2.2",
+    "@tanstack/react-router": "^1.168.22",
+    "dotenv": "catalog:",
+    "lucide-react": "^1.8.0",
+    "next-themes": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "sonner": "^2.0.7",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@popshot/config": "workspace:*",
+    "@tanstack/react-router-devtools": "^1.166.13",
+    "@tanstack/router-plugin": "^1.167.22",
+    "@tauri-apps/cli": "^2.4.0",
+    "@types/node": "^22.13.14",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "^6.0.1",
+    "postcss": "^8.5.10",
+    "tailwindcss": "^4.2.2",
+    "typescript": "catalog:",
+    "vite": "^8.0.8"
+  }
+}
