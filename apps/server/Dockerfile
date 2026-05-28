@@ -16,10 +16,14 @@ FROM oven/bun:1.3-alpine AS deps
 WORKDIR /repo
 
 COPY package.json bun.lock bunfig.toml ./
+# All workspace members must be present or `bun install --frozen-lockfile`
+# sees missing packages and rejects the lockfile as out of date.
 COPY apps/server/package.json ./apps/server/
+COPY apps/web/package.json ./apps/web/
 COPY packages/config/package.json ./packages/config/
 COPY packages/db/package.json ./packages/db/
 COPY packages/env/package.json ./packages/env/
+COPY packages/ui/package.json ./packages/ui/
 
 RUN bun install --frozen-lockfile
 
