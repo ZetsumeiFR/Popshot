@@ -17,3 +17,4 @@ apps/web/src-tauri/target
 apps/web/dist
 .omc
 .turbo
+out
