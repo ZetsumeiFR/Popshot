@@ -28,7 +28,7 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install Linux system dependencies
         if: matrix.platform == 'ubuntu-22.04'
@@ -73,6 +73,6 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: Popshot ${{ github.ref_name }}
           releaseBody: "Téléchargez l'installeur correspondant à votre OS ci-dessous."
-          releaseDraft: true
+          releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}
