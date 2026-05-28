@@ -53,18 +53,20 @@ built-in Traefik will provision a Let's Encrypt cert automatically.
 
 WebSocket upgrades work transparently through Traefik — no extra config needed.
 
-## 4. Register the slash commands
+## 4. Slash commands register automatically
 
-After the first successful deploy, exec a shell into the running container
-from Dokploy's UI and run:
+The relay registers `/send` and `/popshot-link` to the guild on every boot
+(right after the bot logs in), so a fresh deploy is immediately usable — no
+manual step needed. Registration is non-fatal: if the Discord API call fails,
+the relay keeps running and you'll see the error in the logs.
+
+If you ever need to register them by hand (e.g. from your laptop), the
+standalone script still works:
 
 ```sh
-cd /repo/apps/server
+cd apps/server
 bun run discord:register
 ```
-
-This pushes `/send` and `/popshot-link` to the guild. Subsequent code changes
-to those commands only need this step re-run if the schema changes.
 
 ## 5. Point the desktop client at the relay
 

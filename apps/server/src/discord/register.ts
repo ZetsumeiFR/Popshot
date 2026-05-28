@@ -4,7 +4,7 @@ import { REST, Routes } from "discord.js";
 import { linkCommand } from "./commands/link";
 import { sendCommand } from "./commands/send";
 
-async function main() {
+export async function registerCommands(): Promise<void> {
   const rest = new REST({ version: "10" }).setToken(env.DISCORD_TOKEN);
 
   const commands = [sendCommand.toJSON(), linkCommand.toJSON()];
@@ -24,7 +24,10 @@ async function main() {
   console.log(`[register] ✅ Registered ${data.length} command(s).`);
 }
 
-main().catch((error) => {
-  console.error("[register] failed", error);
-  process.exit(1);
-});
+// Allow running this file directly as a CLI: `bun run discord:register`.
+if (import.meta.main) {
+  registerCommands().catch((error) => {
+    console.error("[register] failed", error);
+    process.exit(1);
+  });
+}

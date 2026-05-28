@@ -7,6 +7,7 @@ import {
   handleSendAutocomplete,
   handleSendCommand,
 } from "./commands/send";
+import { registerCommands } from "./register";
 
 export type DiscordBotDeps = {
   dispatch: (payload: DisplayPayload) => { delivered: number };
@@ -61,5 +62,15 @@ export function createDiscordBot({ dispatch }: DiscordBotDeps): Client {
 export async function startDiscordBot(deps: DiscordBotDeps): Promise<Client> {
   const client = createDiscordBot(deps);
   await client.login(env.DISCORD_TOKEN);
+  // Register slash commands on boot so a fresh deploy is immediately usable.
+  // Non-fatal: a Discord API hiccup must not take down the relay.
+  try {
+    await registerCommands();
+  } catch (error) {
+    console.error(
+      "[discord] command registration failed (relay still running)",
+      error,
+    );
+  }
   return client;
 }
