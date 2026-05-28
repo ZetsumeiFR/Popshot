@@ -7,11 +7,13 @@
     "check-types": "tsc -b",
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
     "dev": "bun run --hot src/index.ts",
-    "start": "bun run dist/index.mjs"
+    "start": "bun run dist/index.mjs",
+    "discord:register": "bun run src/discord/register.ts"
   },
   "dependencies": {
     "@popshot/db": "workspace:*",
     "@popshot/env": "workspace:*",
+    "discord.js": "^14.18.0",
     "dotenv": "catalog:",
     "hono": "^4.8.2",
     "zod": "catalog:"

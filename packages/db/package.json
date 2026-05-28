@@ -5,6 +5,12 @@
     ".": {
       "default": "./src/index.ts"
     },
+    "./schema": {
+      "default": "./src/schema/index.ts"
+    },
+    "./repositories/discord-targets": {
+      "default": "./src/repositories/discord-targets.ts"
+    },
     "./*": {
       "default": "./src/*.ts"
     }

@@ -49,3 +49,9 @@ coverage
 .cache
 tmp
 temp
+
+# Local SQLite database
+local.db
+
+# oh-my-claudecode tooling state
+.omc/
