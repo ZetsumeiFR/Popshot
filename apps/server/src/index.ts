@@ -1,6 +1,6 @@
 import { env } from "@popshot/env/server";
 import { Hono } from "hono";
-import { createBunWebSocket } from "hono/bun";
+import { upgradeWebSocket, websocket } from "hono/bun";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 
@@ -14,8 +14,6 @@ import {
   unregisterClient,
   validateHello,
 } from "./relay";
-
-const { upgradeWebSocket, websocket } = createBunWebSocket();
 
 const app = new Hono();
 
