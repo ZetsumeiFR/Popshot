@@ -1,6 +1,6 @@
 [package]
 name = "app"
-version = "0.1.1"
+version = "0.1.2"
 description = "A Tauri App"
 authors = ["you"]
 license = ""
@@ -27,3 +27,6 @@ tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "time",
 tokio-tungstenite = { version = "0.27", features = ["rustls-tls-native-roots"] }
 futures-util = { version = "0.3", default-features = false, features = ["sink", "std"] }
 anyhow = "1"
+# rustls 0.23 has no built-in crypto provider; pin `ring` (no NASM needed at
+# build time, unlike aws-lc-rs) and install it at startup so TLS doesn't panic.
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12", "logging"] }

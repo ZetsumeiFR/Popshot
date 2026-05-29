@@ -276,6 +276,11 @@ pub fn run() {
             prepare_overlay
         ])
         .setup(|app| {
+            // rustls 0.23 ships without a process-default CryptoProvider, so
+            // the WebSocket client's TLS handshake would panic on first use.
+            // Install `ring` before anything spawns a connection.
+            let _ = rustls::crypto::ring::default_provider().install_default();
+
             if cfg!(debug_assertions) {
                 app.handle().plugin(
                     tauri_plugin_log::Builder::default()
